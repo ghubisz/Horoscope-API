@@ -1,5 +1,10 @@
 from core import api
 from flask import jsonify
+from core.utils import get_horoscope_by_day, get_horoscope_by_week, get_horoscope_by_month
+from flask_restx import Resource, reqparse
+from werkzeug.exceptions import BadRequest, NotFound
+from datetime import datetime
+
 
 ns = api.namespace('/', description='Horoscope APIs')
 
@@ -47,6 +52,7 @@ class DailyHoroscopeAPI(Resource):
         except ValueError:
             raise BadRequest('Please enter day in correct format: YYYY-MM-DD')
 
+
 @ns.route('/get-horoscope/weekly')
 class WeeklyHoroscopeAPI(Resource):
     '''Shows weekly horoscope of zodiac signs'''
@@ -61,7 +67,8 @@ class WeeklyHoroscopeAPI(Resource):
         except KeyError:
             raise NotFound('No such zodiac sign exists')
         except AttributeError:
-            raise BadRequest('Something went wrong, please check the URL and the arguments.')
+            raise BadRequest(
+                'Something went wrong, please check the URL and the arguments.')
 
 
 @ns.route('/get-horoscope/monthly')
@@ -78,4 +85,5 @@ class MonthlyHoroscopeAPI(Resource):
         except KeyError:
             raise NotFound('No such zodiac sign exists')
         except AttributeError:
-            raise BadRequest('Something went wrong, please check the URL and the arguments.')
+            raise BadRequest(
+                'Something went wrong, please check the URL and the arguments.')
